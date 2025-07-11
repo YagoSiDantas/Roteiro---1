@@ -1,0 +1,67 @@
+package sorting.linearSorting;
+
+import sorting.AbstractSorting;
+
+/**
+ * Classe que implementa a estratégia de Counting Sort vista em sala.
+ *
+ * Procure evitar desperdício de memória: AO INVÉS de alocar o array de contadores
+ * com um tamanho arbitrariamente grande (por exemplo, com o maior valor de entrada possível),
+ * aloque este array com o tamanho sendo o máximo inteiro presente no array a ser ordenado.
+ *
+ * Seu algoritmo deve assumir que o array de entrada nao possui numeros negativos,
+ * ou seja, possui apenas numeros inteiros positivos e o zero.
+ *
+ */
+public class CountingSort extends AbstractSorting<Integer> {
+
+	@Override
+	public void sort(Integer[] array, int leftIndex, int rightIndex) {
+		if(array.length > 0 && array != null) {
+
+			int[] arrayCount = new int[getMaior(array) - getMenor(array) + 1];
+
+			//cria um array de contagem inicializando todos com 0 ou 1, 2...
+			for(int i = 0; i < rightIndex - leftIndex +1; i++){
+				arrayCount[array[i]] ++;
+			}
+
+			//faz a somatoria das ocorrencias
+			for(int i = 1; i < getMaior(array) - getMenor(array) + 1; i++){
+				arrayCount[i] += arrayCount[i-1];
+			}
+
+			int[] output = new int[array.length];
+
+			for(int i= 0; i < array.length; i++){
+				output[i] = array[i];
+			}
+
+			for(int i = array.length -1; i >= 0; i--){
+				array[arrayCount[output[i]] -1] = output[i];
+				arrayCount[output[i]]--;
+			}
+		}
+
+	}
+
+
+	private int getMaior(Integer[] array){
+		int maior = 0;
+		for(int i=0; i < array.length; i++){
+			maior = Math.max(maior, array[i]);
+		}
+		return maior;
+	}
+
+	private int getMenor(Integer[] array){
+		int menor = 0;
+		for(int i=0; i < array.length; i++){
+			menor = Math.min(menor, array[i]);
+		}
+		return menor;
+	}
+	
+	
+
+}
